@@ -1,0 +1,9 @@
+[package]
+name = "ui"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+const_format = "0.2.35"
+dioxus = { workspace = true }
+
