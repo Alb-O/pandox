@@ -17,4 +17,6 @@ env_logger = "0.11.8"
 log = "0.4.28"
 pandoc = "0.8.11"
 pandoc_types = "0.6.0"
+serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
+with_dir = "0.1.4"

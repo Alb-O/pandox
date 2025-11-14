@@ -6,4 +6,6 @@ edition = "2021"
 [dependencies]
 const_format = "0.2.35"
 dioxus = { workspace = true }
+pandoc_types = "0.6.0"
+parser = { path = "../parser" }
 

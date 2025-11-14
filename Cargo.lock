@@ -1140,6 +1140,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "fastrand"
+version = "2.3.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "37909eebbb50d72f9059c3b6d82c0463f2ff062c9e95845c43a6c9c0355411be"
+
+[[package]]
 name = "find-msvc-tools"
 version = "0.1.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2069,7 +2075,9 @@ dependencies = [
  "log",
  "pandoc",
  "pandoc_types",
+ "serde",
  "serde_json",
+ "with_dir",
 ]
 
 [[package]]
@@ -2794,6 +2802,19 @@ dependencies = [
 ]
 
 [[package]]
+name = "tempfile"
+version = "3.23.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "2d31c77bdf42a745371d260a26ca7163f1e0924b64afa0b688e61b5a9fa02f16"
+dependencies = [
+ "fastrand",
+ "getrandom 0.3.4",
+ "once_cell",
+ "rustix",
+ "windows-sys 0.61.2",
+]
+
+[[package]]
 name = "thiserror"
 version = "1.0.69"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3103,6 +3124,8 @@ version = "0.1.0"
 dependencies = [
  "const_format",
  "dioxus",
+ "pandoc_types",
+ "parser",
 ]
 
 [[package]]
@@ -3313,6 +3336,9 @@ name = "web"
 version = "0.1.0"
 dependencies = [
  "dioxus",
+ "pandoc_types",
+ "parser",
+ "serde_json",
  "ui",
 ]
 
@@ -3596,6 +3622,16 @@ name = "wit-bindgen"
 version = "0.46.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f17a85883d4e6d00e8a97c586de764dabcc06133f7f1d55dce5cdc070ad7fe59"
+
+[[package]]
+name = "with_dir"
+version = "0.1.4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "63ddd66037d0eb074a469314b678249383346c09bb6d3f6b2d64fa60d3b6b2ba"
+dependencies = [
+ "parking_lot",
+ "tempfile",
+]
 
 [[package]]
 name = "writeable"

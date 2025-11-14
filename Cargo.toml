@@ -11,5 +11,4 @@ dioxus = { version = "0.7.1" }
 
 # workspace
 ui = { path = "crates/ui" }
-parser = { path = "crates/parser" }
 

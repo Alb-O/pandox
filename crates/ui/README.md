@@ -1,15 +1,56 @@
 # UI
 
-This crate contains all shared components for the workspace. This is a great place to place any UI you would like to use in multiple platforms like a common `Button` or `Navbar` component.
+Shared components for the workspace, including block component factories for Pandoc-to-Dioxus conversion.
 
 ```
 ui/
 ├─ src/
-│  ├─ lib.rs # The entrypoint for the ui crate
-│  ├─ hero.rs # The Hero component that will be used in every platform
-│  ├─ navbar.rs # The Navbar component that will be used in the layout of every platform's router
+│  ├─ lib.rs    # Entrypoint
+│  ├─ hero.rs   # Hero component
+│  ├─ navbar.rs # Navbar component
+│  ├─ block.rs  # Block component factories
 ```
+
+## Block Components
+
+Factory-pattern components for converting Pandoc AST blocks to Dioxus Elements using `dangerous_inner_html`.
+
+### Simple rendering
+
+```rust
+use ui::blocks_from_components;
+
+rsx! { {blocks_from_components(components)} }
+```
+
+### Typed rendering (with CSS classes)
+
+```rust
+use ui::typed_blocks;
+
+rsx! { {typed_blocks(components)} }
+```
+
+Adds classes: `header-{level}`, `code-block`, `blockquote`, `bullet-list`, `table`, `figure`, etc.
+
+### Custom rendering
+
+```rust
+use pandoc_types::definition::Block as PandocBlock;
+
+match &component.block {
+    PandocBlock::Header(level, _, _) => rsx! { /* custom */ },
+    PandocBlock::CodeBlock(_, _) => rsx! { /* custom */ },
+    _ => rsx! { div { dangerous_inner_html: "{component.html}" } }
+}
+```
+
+### All 14 Pandoc Block types
+
+`Plain`, `Para`, `LineBlock`, `CodeBlock`, `RawBlock`, `BlockQuote`, `OrderedList`, `BulletList`, `DefinitionList`, `Header`, `HorizontalRule`, `Table`, `Figure`, `Div`, `Null`
+
+See `examples/typed_blocks.rs` for demo.
 
 ## Dependencies
 
-Since this crate is shared between multiple platforms, it should not pull in any platform specific dependencies. For example, if you want to use the `web_sys` crate in the web build of your app, you should not add it to this crate. Instead, you should add platform specific dependencies to the [web](../web/Cargo.toml), [desktop](../desktop/Cargo.toml), or [mobile](../mobile/Cargo.toml) crates.
+Shared crate - no platform-specific deps. Platform deps go in [web](../web/Cargo.toml), [desktop](../desktop/Cargo.toml), [mobile](../mobile/Cargo.toml) crates.

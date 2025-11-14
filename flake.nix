@@ -33,6 +33,7 @@
               openssl
               pkg-config
               pandoc
+              tailwindcss_4
               (rust-bin.nightly.latest.default.override {
                 targets = [ "wasm32-unknown-unknown" ];
                 extensions = [ "rust-src" ];
