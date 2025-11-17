@@ -1,10 +1,7 @@
 [workspace]
 resolver = "2"
 members = [
-    "crates/pandox-web",
-    "crates/pandox-ui",
-    "crates/pandox-markdown",
-    "crates/pandox-macros",
+    "crates/*",
 ]
 
 [workspace.package]

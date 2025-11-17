@@ -35,19 +35,11 @@ fn abs_path(path: &Path, root: &Path) -> PathBuf {
 	}
 }
 
-fn resource_path(path: &Path) -> PathBuf {
-	path.parent().unwrap().to_path_buf()
-}
-
-fn markdown_pandoc(input_abs: &Path, output: Option<&Path>, asset_slug: Option<&str>) -> Pandoc {
+fn markdown_pandoc(input_abs: &Path, output: Option<&Path>) -> Pandoc {
 	let mut pandoc = Pandoc::new();
-	let mut opts = vec![
-		pandoc::PandocOption::ResourcePath(vec![resource_path(input_abs)]),
+	let opts = vec![
 		pandoc::PandocOption::NumberSections,
 	];
-	if let Some(slug) = asset_slug {
-		opts.push(pandoc::PandocOption::ExtractMedia(slug.into()));
-	}
 	let _ = pandoc
 		.add_options(&opts)
 		.set_input(pandoc::InputKind::Files(vec![input_abs.to_path_buf()]))
@@ -125,8 +117,7 @@ impl MarkdownParser {
 		// Get AST with rebased paths using markdown input with ExtractMedia
 		let mut pandoc = Pandoc::new();
 		let _ = pandoc
-			.add_options(&[pandoc::PandocOption::ResourcePath(vec![resource_path(&input_abs)]),
-				pandoc::PandocOption::ExtractMedia(asset_slug.into())])
+			.add_options(&[pandoc::PandocOption::ExtractMedia(asset_slug.into())])
 			.set_input(pandoc::InputKind::Files(vec![input_abs]))
 			.set_input_format(
 				pandoc::InputFormat::Markdown,
@@ -204,9 +195,6 @@ impl MarkdownParser {
 
 		let mut pandoc = Pandoc::new();
 		let _ = pandoc
-			.add_option(pandoc::PandocOption::ResourcePath(vec![resource_path(
-				&input_abs,
-			)]))
 			.set_input(pandoc::InputKind::Files(vec![input_abs]))
 			.set_input_format(
 				pandoc::InputFormat::Markdown,
@@ -241,7 +229,7 @@ impl MarkdownParser {
 			return Err(format!("Input file not found: {}", input_abs.display()));
 		}
 		debug!("Converting markdown file {:?} to HTML string", input_abs);
-		let pandoc = markdown_pandoc(&input_abs, None, None);
+		let pandoc = markdown_pandoc(&input_abs, None);
 		match pandoc.execute() {
 			Ok(PandocOutput::ToBuffer(output)) => Ok(output.to_string()),
 			Ok(_) => Err("Unexpected Pandoc output kind".into()),
@@ -280,7 +268,7 @@ impl MarkdownParser {
 			input_abs, output_abs, output_asset_dir
 		);
 		std::fs::create_dir_all(&output_asset_dir).unwrap();
-		let pandoc = markdown_pandoc(&input_abs, Some(&output_abs), Some(asset_slug));
+		let pandoc = markdown_pandoc(&input_abs, Some(&output_abs));
 		let _guard =
 			WithDir::new(output_abs.parent().unwrap()).expect("Failed to change directory");
 		pandoc.execute()

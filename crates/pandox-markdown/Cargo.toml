@@ -7,10 +7,6 @@ edition = { workspace = true }
 name = "pandox_markdown"
 path = "src/lib.rs"
 
-[[bin]]
-name = "pandox-markdown"
-path = "src/main.rs"
-
 [lints]
 workspace = true
 

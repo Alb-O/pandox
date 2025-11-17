@@ -13,15 +13,12 @@ const MODULES_ROOT: &str = concat!(env!("CARGO_MANIFEST_DIR"), "/../../modules")
 
 struct MarkdownArgs {
 	path: LitStr,
-	slug: Option<LitStr>,
-	asset_dir: Option<LitStr>,
 }
 
 impl Parse for MarkdownArgs {
 	fn parse(input: ParseStream) -> syn::Result<Self> {
 		let path: LitStr = input.parse()?;
 		let mut slug = None;
-		let mut asset_dir = None;
 
 		while input.peek(Token![,]) {
 			input.parse::<Token![,]>()?;
@@ -34,7 +31,6 @@ impl Parse for MarkdownArgs {
 			let value: LitStr = input.parse()?;
 			match key.to_string().as_str() {
 				"slug" => slug = Some(value),
-				"asset_dir" => asset_dir = Some(value),
 				other => {
 					return Err(syn::Error::new(
 						key.span(),
@@ -46,8 +42,6 @@ impl Parse for MarkdownArgs {
 
 		Ok(Self {
 			path,
-			slug,
-			asset_dir,
 		})
 	}
 }
@@ -72,24 +66,10 @@ fn expand_markdown(args: &MarkdownArgs) -> Result<TokenStream, TokenStream> {
 
 	let markdown_path = resolve_markdown_path(&path_str)?;
 
-	let slug = args
-		.slug
-		.as_ref()
-		.map(|s| s.value())
-		.unwrap_or_else(|| infer_slug(&path_str));
-	let asset_dir = args
-		.asset_dir
-		.as_ref()
-		.map(|s| s.value())
-		.unwrap_or_else(|| "assets".to_string());
-	let asset_root = resolve_path(&crate_root, &asset_dir);
-
 	let parser = MarkdownParser::new();
 	let components = parser
-		.extract_components_with_assets(
+		.extract_components(
 			markdown_path.as_path(),
-			asset_root.as_path(),
-			&slug,
 			Some(crate_root.as_path()),
 		)
 		.map_err(|err| compile_error(&err.to_string()))?;
@@ -194,15 +174,6 @@ fn escape_rsx_strings(source: &str) -> String {
 	escaped
 }
 
-fn resolve_path(root: &Path, value: &str) -> PathBuf {
-	let candidate = PathBuf::from(value);
-	if candidate.is_absolute() {
-		candidate
-	} else {
-		root.join(candidate)
-	}
-}
-
 fn resolve_markdown_path(value: &str) -> Result<PathBuf, TokenStream> {
 	let path = Path::new(value);
 	if path.as_os_str().is_empty() {
@@ -228,15 +199,6 @@ fn resolve_markdown_path(value: &str) -> Result<PathBuf, TokenStream> {
 	}
 
 	Ok(Path::new(MODULES_ROOT).join(path))
-}
-
-fn infer_slug(path: &str) -> String {
-	let path = Path::new(path);
-	path.parent()
-		.and_then(|p| p.file_name())
-		.or_else(|| path.file_stem())
-		.map(|s| s.to_string_lossy().to_string())
-		.unwrap_or_else(|| "content".to_string())
 }
 
 fn compile_error(msg: &str) -> TokenStream {

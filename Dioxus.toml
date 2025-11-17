@@ -1,11 +1,13 @@
 [application]
 default_platform = "web"
-tailwind_input = "crates/pandox-web/tailwind.css"
-tailwind_output = "crates/pandox-web/assets/tailwind.compiled.css"
+
+# Relative to pandox-web crate
+tailwind_input = "tailwind.css"
+tailwind_output = "assets/tailwind.compiled.css"
+public_dir = "../../modules"
 
 [web.app]
 title = "Pandox"
 
 [web.watcher]
 reload_html = true
-watch_path = [ "../../modules", "../../crates" ] 

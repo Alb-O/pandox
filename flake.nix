@@ -5,14 +5,12 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     rust-overlay.url = "github:oxalica/rust-overlay";
     flake-utils.url = "github:numtide/flake-utils";
-    dx7.url = "github:NixOS/nixpkgs/master";
   };
 
   outputs =
     {
       self,
       nixpkgs,
-      dx7,
       rust-overlay,
       flake-utils,
       ...
@@ -34,11 +32,11 @@
               pkg-config
               pandoc
               tailwindcss_4
+              dioxus-cli
               (rust-bin.nightly.latest.default.override {
                 targets = [ "wasm32-unknown-unknown" ];
                 extensions = [ "rust-src" ];
               })
-              dx7.legacyPackages.${pkgs.system}.dioxus-cli
             ];
             shellHook = ''
               cargo install wasm-bindgen-cli --all-features -q
