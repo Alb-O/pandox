@@ -11,6 +11,9 @@ members = [
 edition = "2024"
 version = "0.1.0"
 
+[workspace.lints.rust]
+missing_docs = "warn"
+
 [workspace.dependencies]
 dioxus = "0.7"
 pandox-ui = { path = "crates/pandox-ui" }

@@ -10,7 +10,7 @@
 //! Pandox Parser - Markdown to HTML converter using Pandoc
 //!
 //! This crate provides functionality to parse Markdown files using Pandoc
-//! and convert them to HTML for use with Dioxus's `dangerous_inner_html`.
+//! and convert them to HTML for feeding into the `dx translate` pipeline that produces RSX.
 //!
 //! # Example
 //!

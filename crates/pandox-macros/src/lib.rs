@@ -1,12 +1,13 @@
+//!! Macros for building markdown-based components.
+
 use std::path::{Path, PathBuf};
 
 use pandox_markdown::{BlockComponent, MarkdownParser};
-use pandox_ui::block_class;
 use proc_macro::TokenStream;
 use proc_macro2::Span as Span2;
 use quote::quote;
 use syn::parse::{Parse, ParseStream};
-use syn::{Ident, LitStr, Token, parse_macro_input};
+use syn::{parse_macro_input, Ident, LitStr, Token};
 
 struct MarkdownArgs {
 	path: LitStr,
@@ -49,6 +50,7 @@ impl Parse for MarkdownArgs {
 	}
 }
 
+/// Macro to include a markdown file as a Dioxus RSX component.
 #[proc_macro]
 pub fn markdown_component(input: TokenStream) -> TokenStream {
 	let args = parse_macro_input!(input as MarkdownArgs);
@@ -107,25 +109,92 @@ fn expand_markdown(args: &MarkdownArgs) -> Result<TokenStream, TokenStream> {
 }
 
 fn block_to_tokens(block: BlockComponent) -> proc_macro2::TokenStream {
-	let class = block_class(&block);
-	let html = LitStr::new(block.html.trim_end(), Span2::call_site());
+	html_to_rsx_tokens(&block.html)
+}
 
-	match class {
-		Some(class) => {
-			let class_lit = LitStr::new(&class, Span2::call_site());
-			quote! {
-				div {
-					class: #class_lit,
-					dangerous_inner_html: { #html },
+fn html_to_rsx_tokens(html: &str) -> proc_macro2::TokenStream {
+	if html.trim().is_empty() {
+		return proc_macro2::TokenStream::new();
+	}
+
+	let rsx = html_to_rsx(html);
+	let snippet = rsx.trim();
+	if snippet.is_empty() {
+		return proc_macro2::TokenStream::new();
+	}
+
+	let escaped = escape_rsx_strings(snippet);
+
+	syn::parse_str(&escaped)
+		.unwrap_or_else(|err| panic!("failed to parse RSX tokens: {err}\n{escaped}"))
+}
+
+fn html_to_rsx(html: &str) -> String {
+	let dom =
+		html_parser::Dom::parse(html).unwrap_or_else(|err| panic!("failed to parse HTML: {err}"));
+
+	let callbody = dioxus_rsx_rosetta::rsx_from_html(&dom);
+
+	dioxus_autofmt::write_block_out(&callbody).unwrap_or_else(|| panic!("failed to format RSX"))
+}
+
+fn escape_rsx_strings(source: &str) -> String {
+	let mut escaped = String::with_capacity(source.len());
+	let mut in_string = false;
+	let mut is_escaped = false;
+	let mut saw_unicode_prefix = false;
+	let mut unicode_escape = false;
+
+	for ch in source.chars() {
+		if !is_escaped && ch == '"' {
+			in_string = !in_string;
+			escaped.push(ch);
+			continue;
+		}
+
+		if in_string && saw_unicode_prefix && ch == '{' {
+			unicode_escape = true;
+			saw_unicode_prefix = false;
+			escaped.push(ch);
+			continue;
+		}
+
+		if unicode_escape {
+			if ch == '}' {
+				unicode_escape = false;
+			}
+			escaped.push(ch);
+			continue;
+		}
+
+		if in_string && !is_escaped {
+			match ch {
+				'{' => {
+					escaped.push('{');
+					escaped.push('{');
+					continue;
 				}
+				'}' => {
+					escaped.push('}');
+					escaped.push('}');
+					continue;
+				}
+				_ => {}
 			}
 		}
-		None => quote! {
-			div {
-				dangerous_inner_html: { #html },
-			}
-		},
+
+		if in_string && ch == '\\' && !is_escaped {
+			is_escaped = true;
+			saw_unicode_prefix = false;
+		} else {
+			saw_unicode_prefix = is_escaped && matches!(ch, 'u' | 'U');
+			is_escaped = false;
+		}
+
+		escaped.push(ch);
 	}
+
+	escaped
 }
 
 fn resolve_path(root: &Path, value: &str) -> PathBuf {

@@ -4,7 +4,7 @@ Markdown to HTML converter powered by Pandoc, for use with Dioxus.
 
 ## Overview
 
-This crate converts Markdown documents to HTML using Pandoc. The HTML can then be rendered in Dioxus applications using `dangerous_inner_html`.
+This crate converts Markdown documents to HTML using `pandoc` and `dioxus_rsx_rosetta`.
 
 ## Usage
 
@@ -24,19 +24,14 @@ let html = parser.to_html_string("# Hello\n\nWorld")?;
 
 ### In Dioxus
 
+The `pandox-macros` crate calls into `MarkdownParser`, runs each block through `dx translate`, and embeds the generated RSX directly at compile time:
+
 ```rust
-use pandox_markdown::MarkdownParser;
+use pandox_macros::markdown_component;
 
+#[component]
 fn BlogPost() -> Element {
-    let parser = MarkdownParser::new();
-    let html = parser.to_html_file(Path::new("post.md")).unwrap();
-
-    rsx! {
-        div {
-            class: "markdown-content",
-            dangerous_inner_html: "{html}"
-        }
-    }
+    markdown_component!("../../public/test/index.md", slug = "test")
 }
 ```
 

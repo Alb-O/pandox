@@ -4,3 +4,46 @@ body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     margin: 20px;
 }
+
+.custom-blocks {
+    margin-top: 2rem;
+    padding: 1rem;
+    border: 1px solid #2a2d36;
+    border-radius: 12px;
+    background: #181b23;
+}
+
+.callout {
+    border-radius: 12px;
+    padding: 0.75rem 1rem;
+    background: #11141c;
+    border-left: 4px solid #5dd3ff;
+    margin-bottom: 0.75rem;
+}
+
+.callout.callout-info {
+    border-left-color: #5dd3ff;
+}
+
+.callout.callout-warning {
+    border-left-color: #ffc857;
+}
+
+.callout.callout-danger {
+    border-left-color: #ff6b6b;
+}
+
+.callout.callout-note {
+    border-left-color: #5dd3ff;
+}
+
+.callout-label {
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+    color: #5dd3ff;
+    margin-bottom: 0.25rem;
+}
+
+.callout-body {
+    color: #f4f4f4;
+}

@@ -1,3 +1,5 @@
+//!! The main entry point for the Pandox web application.
+
 use dioxus::prelude::*;
 use pandox_ui::Navbar;
 use views::{Blog, Home, Test};

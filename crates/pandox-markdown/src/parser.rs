@@ -55,6 +55,7 @@ fn markdown_pandoc(input_abs: &Path, output: Option<&Path>, asset_slug: Option<&
 			pandoc::InputFormat::Markdown,
 			vec![
 				pandoc::MarkdownExtension::RebaseRelativePaths,
+				pandoc::MarkdownExtension::FencedDivs,
 				pandoc::MarkdownExtension::Smart,
 			],
 		);
@@ -124,15 +125,14 @@ impl MarkdownParser {
 		// Get AST with rebased paths using markdown input with ExtractMedia
 		let mut pandoc = Pandoc::new();
 		let _ = pandoc
-			.add_options(&vec![
-				pandoc::PandocOption::ResourcePath(vec![resource_path(&input_abs)]),
-				pandoc::PandocOption::ExtractMedia(asset_slug.into()),
-			])
+			.add_options(&[pandoc::PandocOption::ResourcePath(vec![resource_path(&input_abs)]),
+				pandoc::PandocOption::ExtractMedia(asset_slug.into())])
 			.set_input(pandoc::InputKind::Files(vec![input_abs]))
 			.set_input_format(
 				pandoc::InputFormat::Markdown,
 				vec![
 					pandoc::MarkdownExtension::RebaseRelativePaths,
+					pandoc::MarkdownExtension::FencedDivs,
 					pandoc::MarkdownExtension::Smart,
 				],
 			)
@@ -140,7 +140,7 @@ impl MarkdownParser {
 			.set_output_format(OutputFormat::Json, vec![]);
 
 		// Execute in asset output directory so ExtractMedia works
-		let _guard = WithDir::new(&asset_output_dir)
+		let _guard = WithDir::new(asset_output_dir)
 			.map_err(|e| format!("Failed to change directory: {}", e))?;
 
 		let ast: PandocAst = match pandoc.execute() {
@@ -212,6 +212,7 @@ impl MarkdownParser {
 				pandoc::InputFormat::Markdown,
 				vec![
 					pandoc::MarkdownExtension::RebaseRelativePaths,
+					pandoc::MarkdownExtension::FencedDivs,
 					pandoc::MarkdownExtension::Smart,
 				],
 			)

@@ -32,6 +32,10 @@ This is ~~strikethrough~~ text.
 
 You can also use `inline code` within text.
 
+::: {.callout .warning}
+**Heads up:** this section demonstrates a custom `callout` block rendered with a bespoke component.
+:::
+
 ## Lists
 
 ### Unordered Lists

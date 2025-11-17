@@ -3,6 +3,7 @@ use dioxus::prelude::*;
 const HERO_CSS: Asset = asset!("/assets/styling/hero.css");
 const HEADER_SVG: Asset = asset!("/assets/header.svg");
 
+/// Hero component for displaying the main header and navigation links.
 #[component]
 pub fn Hero() -> Element {
 	rsx! {

@@ -3,10 +3,15 @@ name = "pandox-web"
 version = { workspace = true }
 edition = { workspace = true }
 
+[lints]
+workspace = true
+
 [dependencies]
 dioxus = { workspace = true, features = ["router"] }
 pandox-ui = { workspace = true }
 pandox-macros = { workspace = true }
+pandox-markdown = { workspace = true }
+pandoc_types = "0.6.0"
 
 [features]
 default = ["web"]
