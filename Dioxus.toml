@@ -1,5 +1,7 @@
 [application]
 default_platform = "web"
+tailwind_input = "crates/pandox-web/tailwind.css"
+tailwind_output = "crates/pandox-web/assets/tailwind.compiled.css"
 
 [web.app]
 title = "Pandox"
