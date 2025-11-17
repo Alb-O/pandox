@@ -27,22 +27,12 @@ let html = parser.to_html_string("# Hello\n\nWorld")?;
 The `pandox-macros` crate calls into `MarkdownParser`, runs each block through `dx translate`, and embeds the generated RSX directly at compile time:
 
 ```rust
-use pandox_macros::markdown_component;
+use pandox_macros::mdfile;
 
 #[component]
 fn BlogPost() -> Element {
-    markdown_component!("../../public/test/index.md", slug = "test")
+    mdfile!("test/index.md", slug = "test")
 }
-```
-
-### As a CLI Tool
-
-```bash
-# Run the demo
-cargo run -p pandox-markdown
-
-# Build the binary
-cargo build -p pandox-markdown --release
 ```
 
 ## Dependencies

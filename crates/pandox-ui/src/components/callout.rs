@@ -25,7 +25,7 @@ impl CalloutTone {
 }
 
 /// Props for the [`Callout`] component.
-#[derive(Props, PartialEq, Clone)]
+#[derive(Props, PartialEq, Clone, Debug)]
 pub struct CalloutProps {
 	/// Severity tone that controls styling.
 	pub tone: CalloutTone,

@@ -17,6 +17,7 @@ pub use navbar::Navbar;
 pub type StatelessComponent = fn() -> Element;
 
 /// Simple registry for reusable stateless components.
+#[derive(Debug)]
 pub struct ComponentStore {
 	map: BTreeMap<&'static str, StatelessComponent>,
 }
@@ -35,6 +36,7 @@ impl ComponentStore {
 	}
 
 	/// Register a component under a given name.
+	#[allow(unused_results)]
 	pub fn register(mut self, name: &'static str, component: StatelessComponent) -> Self {
 		self.map.insert(name, component);
 		self

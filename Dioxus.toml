@@ -1,6 +1,9 @@
 [application]
 default_platform = "web"
-public_dir = "../../public/test"
+
+[web.app]
+title = "Pandox"
 
 [web.watcher]
 reload_html = true
+watch_path = [ "../../modules", "../../crates" ] 

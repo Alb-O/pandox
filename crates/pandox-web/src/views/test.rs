@@ -1,5 +1,5 @@
 use dioxus::prelude::*;
-use pandox_macros::markdown_component;
+use pandox_macros::mdfile;
 
 #[component]
 pub fn Test() -> Element {
@@ -13,5 +13,5 @@ pub fn Test() -> Element {
 
 #[component]
 pub fn TestContent() -> Element {
-	markdown_component!("../../public/test/index.md", slug = "test")
+	mdfile!("test/index.md", slug = "test")
 }

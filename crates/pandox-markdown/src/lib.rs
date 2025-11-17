@@ -20,7 +20,7 @@
 //!
 //! let parser = MarkdownParser::new();
 //! parser.to_html_file(
-//!     Path::new("public/test.md"),
+//!     Path::new("modules/test.md"),
 //!     Path::new("dist/test.html"),
 //!     "assets",
 //!     None

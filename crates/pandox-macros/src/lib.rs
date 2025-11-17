@@ -1,6 +1,6 @@
 //!! Macros for building markdown-based components.
 
-use std::path::{Path, PathBuf};
+use std::path::{Component, Path, PathBuf};
 
 use pandox_markdown::{BlockComponent, MarkdownParser};
 use proc_macro::TokenStream;
@@ -8,6 +8,8 @@ use proc_macro2::Span as Span2;
 use quote::quote;
 use syn::parse::{Parse, ParseStream};
 use syn::{parse_macro_input, Ident, LitStr, Token};
+
+const MODULES_ROOT: &str = concat!(env!("CARGO_MANIFEST_DIR"), "/../../modules");
 
 struct MarkdownArgs {
 	path: LitStr,
@@ -52,7 +54,7 @@ impl Parse for MarkdownArgs {
 
 /// Macro to include a markdown file as a Dioxus RSX component.
 #[proc_macro]
-pub fn markdown_component(input: TokenStream) -> TokenStream {
+pub fn mdfile(input: TokenStream) -> TokenStream {
 	let args = parse_macro_input!(input as MarkdownArgs);
 
 	match expand_markdown(&args) {
@@ -64,14 +66,11 @@ pub fn markdown_component(input: TokenStream) -> TokenStream {
 fn expand_markdown(args: &MarkdownArgs) -> Result<TokenStream, TokenStream> {
 	let crate_root = std::env::var("CARGO_MANIFEST_DIR")
 		.map(PathBuf::from)
-		.map_err(|_| {
-			TokenStream::from(
-				syn::Error::new(Span2::call_site(), "CARGO_MANIFEST_DIR not set")
-					.to_compile_error(),
-			)
-		})?;
+		.map_err(|_| compile_error("CARGO_MANIFEST_DIR not set"))?;
 
 	let path_str = args.path.value();
+
+	let markdown_path = resolve_markdown_path(&path_str)?;
 
 	let slug = args
 		.slug
@@ -88,14 +87,12 @@ fn expand_markdown(args: &MarkdownArgs) -> Result<TokenStream, TokenStream> {
 	let parser = MarkdownParser::new();
 	let components = parser
 		.extract_components_with_assets(
-			Path::new(&path_str),
+			markdown_path.as_path(),
 			asset_root.as_path(),
 			&slug,
 			Some(crate_root.as_path()),
 		)
-		.map_err(|err| {
-			TokenStream::from(syn::Error::new(Span2::call_site(), err).to_compile_error())
-		})?;
+		.map_err(|err| compile_error(&err.to_string()))?;
 
 	let nodes = components.into_iter().map(block_to_tokens);
 
@@ -206,6 +203,33 @@ fn resolve_path(root: &Path, value: &str) -> PathBuf {
 	}
 }
 
+fn resolve_markdown_path(value: &str) -> Result<PathBuf, TokenStream> {
+	let path = Path::new(value);
+	if path.as_os_str().is_empty() {
+		return Err(compile_error("md path missing"));
+	}
+
+	for comp in path.components() {
+		match comp {
+			Component::Normal(_) => {}
+			Component::CurDir => return Err(compile_error("skip `./` in md paths")),
+			Component::ParentDir => return Err(compile_error("md paths stay under modules/")),
+			Component::RootDir | Component::Prefix(_) => {
+				return Err(compile_error("absolute md paths not allowed"))
+			}
+		}
+	}
+
+	if matches!(
+		path.components().next(),
+		Some(Component::Normal(seg)) if seg == "modules"
+	) {
+		return Err(compile_error("omit leading `modules/`"));
+	}
+
+	Ok(Path::new(MODULES_ROOT).join(path))
+}
+
 fn infer_slug(path: &str) -> String {
 	let path = Path::new(path);
 	path.parent()
@@ -213,4 +237,8 @@ fn infer_slug(path: &str) -> String {
 		.or_else(|| path.file_stem())
 		.map(|s| s.to_string_lossy().to_string())
 		.unwrap_or_else(|| "content".to_string())
+}
+
+fn compile_error(msg: &str) -> TokenStream {
+	TokenStream::from(syn::Error::new(Span2::call_site(), msg).to_compile_error())
 }

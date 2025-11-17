@@ -1,3 +1,12 @@
+#![warn(
+	missing_docs,
+	missing_debug_implementations,
+	missing_copy_implementations,
+	trivial_bounds,
+	unused_extern_crates,
+	unused_results
+)]
+
 //!! The main entry point for the Pandox web application.
 
 use dioxus::prelude::*;
