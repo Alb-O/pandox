@@ -15,12 +15,12 @@
 //! # Example
 //!
 //! ```no_run
-//! use parser::MarkdownParser;
+//! use pandox_markdown::MarkdownParser;
 //! use std::path::Path;
 //!
 //! let parser = MarkdownParser::new();
 //! parser.to_html_file(
-//!     Path::new("content/test.md"),
+//!     Path::new("public/test.md"),
 //!     Path::new("dist/test.html"),
 //!     "assets",
 //!     None

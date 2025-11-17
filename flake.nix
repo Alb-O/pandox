@@ -5,7 +5,7 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     rust-overlay.url = "github:oxalica/rust-overlay";
     flake-utils.url = "github:numtide/flake-utils";
-    dx7.url = "github:CathalMullan/nixpkgs/dioxus-cli-v0.7.0";
+    dx7.url = "github:NixOS/nixpkgs/master";
   };
 
   outputs =
@@ -41,7 +41,7 @@
               dx7.legacyPackages.${pkgs.system}.dioxus-cli
             ];
             shellHook = ''
-              cargo install wasm-bindgen-cli --all-features
+              cargo install wasm-bindgen-cli --all-features -q
               export PATH=$CARGO_HOME/bin:$PATH
             '';
           };

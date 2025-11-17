@@ -1,14 +1,19 @@
 [workspace]
 resolver = "2"
 members = [
-    "crates/ui",
-    "crates/web",
-    "crates/parser",
+    "crates/pandox-web",
+    "crates/pandox-ui",
+    "crates/pandox-markdown",
+    "crates/pandox-macros",
 ]
 
+[workspace.package]
+edition = "2024"
+version = "0.1.0"
+
 [workspace.dependencies]
-dioxus = { version = "0.7.1" }
-
-# workspace
-ui = { path = "crates/ui" }
-
+dioxus = "0.7"
+pandox-ui = { path = "crates/pandox-ui" }
+pandox-web = { path = "crates/pandox-web" }
+pandox-markdown = { path = "crates/pandox-markdown" }
+pandox-macros = { path = "crates/pandox-macros" }

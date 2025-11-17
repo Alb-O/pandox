@@ -13,8 +13,6 @@ This is a comprehensive test document showcasing various markdown features for p
 - [Blockquotes](#blockquotes)
 - [Horizontal Rules](#horizontal-rules)
 
-## Headings
-
 # Heading 1
 ## Heading 2
 ### Heading 3

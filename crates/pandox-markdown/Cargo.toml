@@ -1,14 +1,14 @@
 [package]
-name = "parser"
-version = "0.1.0"
-edition = "2024"
+name = "pandox-markdown"
+version = { workspace = true }
+edition = { workspace = true }
 
 [lib]
-name = "parser"
+name = "pandox_markdown"
 path = "src/lib.rs"
 
 [[bin]]
-name = "parser"
+name = "pandox-markdown"
 path = "src/main.rs"
 
 [dependencies]

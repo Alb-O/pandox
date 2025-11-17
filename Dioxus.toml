@@ -1,0 +1,6 @@
+[application]
+default_platform = "web"
+public_dir = "../../public/test"
+
+[web.watcher]
+reload_html = true

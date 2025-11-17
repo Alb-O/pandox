@@ -1,0 +1,10 @@
+[package]
+name = "pandox-ui"
+version = { workspace = true }
+edition = { workspace = true }
+
+[dependencies]
+const_format = "0.2.35"
+dioxus = { workspace = true }
+pandoc_types = "0.6.0"
+pandox-markdown = { workspace = true }

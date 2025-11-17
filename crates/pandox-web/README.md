@@ -1,9 +1,9 @@
 # Development
 
-The web crate defines the entrypoint for the web app along with any assets, components and dependencies that are specific to web builds. The web crate starts out something like this:
+The web crate defines the entrypoint for the web app along with any assets, components and dependencies that are specific to web builds. The layout starts out something like this:
 
 ```
-web/
+pandox-web/
 ├─ assets/ # Assets used by the web app - Any platform specific assets should go in this folder
 ├─ src/
 │  ├─ main.rs # The entrypoint for the web app.It also defines the routes for the web platform
@@ -15,7 +15,7 @@ web/
 ```
 
 ## Dependencies
-This crate will only be included in the web build, so you should add all web specific dependencies to this crate's [Cargo.toml](../Cargo.toml) file instead of the shared [ui](../ui/Cargo.toml) crate.
+This crate only compiles for the web build, so platform-specific deps belong in this crate's [Cargo.toml](../Cargo.toml) instead of the shared [pandox-ui](../pandox-ui/Cargo.toml) crate.
 
 ### Serving Your Web App
 

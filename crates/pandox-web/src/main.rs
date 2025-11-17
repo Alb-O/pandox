@@ -1,5 +1,5 @@
 use dioxus::prelude::*;
-use ui::Navbar;
+use pandox_ui::Navbar;
 use views::{Blog, Home, Test};
 
 mod views;

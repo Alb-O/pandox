@@ -1,0 +1,13 @@
+[package]
+name = "pandox-web"
+version = { workspace = true }
+edition = { workspace = true }
+
+[dependencies]
+dioxus = { workspace = true, features = ["router"] }
+pandox-ui = { workspace = true }
+pandox-macros = { workspace = true }
+
+[features]
+default = ["web"]
+web = ["dioxus/web"]

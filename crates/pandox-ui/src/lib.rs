@@ -7,4 +7,6 @@ mod navbar;
 pub use navbar::Navbar;
 
 mod block;
-pub use block::{Block, TypedBlock};
+pub use block::{
+	BLOCK_MANIFEST, Block, BlockRenderer, TypedBlock, block_class, render_from_manifest,
+};

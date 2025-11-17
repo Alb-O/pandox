@@ -2,14 +2,14 @@ use std::path::PathBuf;
 
 use clap::Parser;
 use log::{error, info};
-use parser::MarkdownParser;
+use pandox_markdown::MarkdownParser;
 
 #[derive(Parser)]
-#[command(name = "parser")]
+#[command(name = "pandox-markdown")]
 #[command(about = "Convert markdown to HTML using pandoc_file")]
 struct Cli {
 	/// Input markdown file
-	#[arg(short, long, default_value = "content/test/index.md")]
+	#[arg(short, long, default_value = "public/test/index.md")]
 	input: PathBuf,
 
 	/// Output HTML file
