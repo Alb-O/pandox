@@ -1,10 +1,12 @@
 [package]
-name = "pandox-ui"
+name = "pandox-site"
 version.workspace = true
 edition.workspace = true
 
 [dependencies]
 dioxus.workspace = true
+pandox-components.workspace = true
+pandox-modules.workspace = true
 
 [lints]
 workspace = true

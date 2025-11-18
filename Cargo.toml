@@ -16,11 +16,15 @@ rust.unused_crate_dependencies = "warn"
 dioxus = { version = "0.7", features = ["router"] }
 env_logger = "0.11"
 log = "0.4"
+pandox-components = { path = "crates/pandox-components" }
 pandox-macros = { path = "crates/pandox-macros" }
-pandox-markdown = { path = "crates/pandox-markdown" }
-pandox-ui = { path = "crates/pandox-ui" }
+pandox-pandoc = { path = "crates/pandox-pandoc" }
+pandox-modules = { path = "crates/pandox-modules" }
+pandox-site = { path = "crates/pandox-site" }
 
 [dependencies]
 dioxus = { workspace = true }
+pandox-components = { workspace = true }
 pandox-macros = { workspace = true }
-pandox-ui = { workspace = true }
+pandox-pandoc = { workspace = true }
+pandox-site = { workspace = true }

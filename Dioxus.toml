@@ -1,7 +1,7 @@
 [application]
 default_platform = "web"
 
-tailwind_input = "tailwind.css"
+tailwind_input = "assets/tailwind.css"
 tailwind_output = "assets/tailwind.compiled.css"
 public_dir = "modules"
 

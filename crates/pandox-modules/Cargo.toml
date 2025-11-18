@@ -1,0 +1,11 @@
+[package]
+name = "pandox-modules"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+pandox-macros.workspace = true
+dioxus.workspace = true
+
+[lints]
+workspace = true

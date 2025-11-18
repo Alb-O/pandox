@@ -1,5 +1,5 @@
 [package]
-name = "pandox-markdown"
+name = "pandox-pandoc"
 version.workspace = true
 edition.workspace = true
 

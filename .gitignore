@@ -9,3 +9,4 @@
 .direnv/
 *.local.*
 tailwind.compiled.css
+/tmp

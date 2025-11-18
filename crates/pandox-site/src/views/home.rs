@@ -1,5 +1,5 @@
 use dioxus::prelude::*;
-use pandox_ui::Hero;
+use pandox_components::Hero;
 
 #[component]
 pub fn Home() -> Element {

@@ -1,19 +1,24 @@
 //!! Macros for building markdown-based components.
 
-use pandox_markdown::MarkdownParser;
-use proc_macro::TokenStream;
-use quote::quote;
-use log::debug;
-use syn::parse_macro_input;
 use std::path::PathBuf;
 
-const MODULES_ROOT: &str = concat!(env!("CARGO_MANIFEST_DIR"), "/../../modules");
+use log::debug;
+use pandox_pandoc::MarkdownParser;
+use proc_macro::TokenStream;
+use quote::quote;
+use syn::parse_macro_input;
+
+pub(crate) const MODULES_DIR: &str = "pandox-modules";
+
+pub(crate) fn modules_root() -> String {
+	format!("{}/../{}", env!("CARGO_MANIFEST_DIR"), MODULES_DIR)
+}
 
 mod args;
-mod render;
 mod assets;
-mod rewrite;
 mod dump;
+mod render;
+mod rewrite;
 mod utils;
 
 /// Macro to include a markdown file as a Dioxus RSX component.
@@ -52,7 +57,11 @@ fn expand_markdown(args: &args::MarkdownArgs) -> Result<TokenStream, TokenStream
 	}
 
 	dump::dump_full_rsx(markdown_path.as_path(), &rendered);
-	debug!("Rendered {} blocks from {:?}", rendered.len(), markdown_path);
+	debug!(
+		"Rendered {} blocks from {:?}",
+		rendered.len(),
+		markdown_path
+	);
 
 	let nodes = rendered.iter().map(|block| block.tokens.clone());
 
@@ -61,6 +70,5 @@ fn expand_markdown(args: &args::MarkdownArgs) -> Result<TokenStream, TokenStream
 			#(#nodes)*
 		}
 	};
-
 	Ok(expanded.into())
 }

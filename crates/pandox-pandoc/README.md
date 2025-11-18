@@ -1,4 +1,4 @@
-# pandox-markdown
+# pandox-pandoc
 
 Markdown to HTML converter powered by Pandoc, for use with Dioxus.
 
@@ -11,7 +11,7 @@ This crate converts Markdown documents to HTML using `pandoc` and `dioxus_rsx_ro
 ### As a Library
 
 ```rust
-use pandox_markdown::MarkdownParser;
+use pandox_pandoc::MarkdownParser;
 use std::path::Path;
 
 // Parse a markdown file to HTML
@@ -68,7 +68,7 @@ let ast = parser.parse_string("# Hello")?;
 ## Development
 
 ```bash
-cargo test -p pandox-markdown
-cargo build -p pandox-markdown
+cargo test -p pandox-pandoc
+cargo build -p pandox-pandoc
 cargo run --example dioxus_example
 ```

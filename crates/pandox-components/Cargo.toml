@@ -1,0 +1,10 @@
+[package]
+name = "pandox-components"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+dioxus.workspace = true
+
+[lints]
+workspace = true

@@ -1263,8 +1263,17 @@ name = "pandox"
 version = "0.0.0"
 dependencies = [
  "dioxus",
+ "pandox-components",
  "pandox-macros",
- "pandox-ui",
+ "pandox-pandoc",
+ "pandox-site",
+]
+
+[[package]]
+name = "pandox-components"
+version = "0.1.0"
+dependencies = [
+ "dioxus",
 ]
 
 [[package]]
@@ -1276,14 +1285,22 @@ dependencies = [
  "dioxus-rsx-rosetta",
  "html_parser",
  "log",
- "pandox-markdown",
+ "pandox-pandoc",
  "proc-macro2",
  "quote",
  "syn 2.0.110",
 ]
 
 [[package]]
-name = "pandox-markdown"
+name = "pandox-modules"
+version = "0.1.0"
+dependencies = [
+ "dioxus",
+ "pandox-macros",
+]
+
+[[package]]
+name = "pandox-pandoc"
 version = "0.1.0"
 dependencies = [
  "log",
@@ -1295,10 +1312,12 @@ dependencies = [
 ]
 
 [[package]]
-name = "pandox-ui"
+name = "pandox-site"
 version = "0.1.0"
 dependencies = [
  "dioxus",
+ "pandox-components",
+ "pandox-modules",
 ]
 
 [[package]]
