@@ -54,7 +54,7 @@ impl ComponentStore {
 }
 
 impl Default for ComponentStore {
-    fn default() -> Self {
-        Self::new()
-    }
+	fn default() -> Self {
+		Self::new()
+	}
 }

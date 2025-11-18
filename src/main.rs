@@ -1,12 +1,3 @@
-#![warn(
-	missing_docs,
-	missing_debug_implementations,
-	missing_copy_implementations,
-	trivial_bounds,
-	unused_extern_crates,
-	unused_results
-)]
-
 //!! The main entry point for the Pandox web application.
 
 use dioxus::prelude::*;
@@ -18,13 +9,13 @@ mod views;
 #[derive(Debug, Clone, Routable, PartialEq)]
 #[rustfmt::skip]
 enum Route {
-    #[layout(WebNavbar)]
-    #[route("/")]
-    Home {},
-    #[route("/blog/:id")]
-    Blog { id: i32 },
-    #[route("/test")]
-    Test {},
+	#[layout(WebNavbar)]
+	#[route("/")]
+	Home {},
+	#[route("/blog")]
+	Blog {},
+	#[route("/test")]
+	Test {},
 }
 
 const FAVICON: Asset = asset!("/assets/favicon.ico");
@@ -58,7 +49,7 @@ fn WebNavbar() -> Element {
 				"Home"
 			}
 			Link {
-				to: Route::Blog { id: 1 },
+				to: Route::Blog {},
 				"Blog"
 			}
 			Link {

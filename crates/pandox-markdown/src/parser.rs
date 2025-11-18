@@ -37,9 +37,7 @@ fn abs_path(path: &Path, root: &Path) -> PathBuf {
 
 fn markdown_pandoc(input_abs: &Path, output: Option<&Path>) -> Pandoc {
 	let mut pandoc = Pandoc::new();
-	let opts = vec![
-		pandoc::PandocOption::NumberSections,
-	];
+	let opts = vec![pandoc::PandocOption::NumberSections];
 	let _ = pandoc
 		.add_options(&opts)
 		.set_input(pandoc::InputKind::Files(vec![input_abs.to_path_buf()]))
@@ -82,67 +80,6 @@ impl MarkdownParser {
 		let ast = self.to_pandoc_ast(input, project_root)?;
 		let mut components = Vec::new();
 
-		for block in ast.blocks {
-			let html = self.block_to_html(&block)?;
-			components.push(BlockComponent {
-				html,
-				block: block.clone(),
-			});
-		}
-
-		Ok(components)
-	}
-
-	/// Extract block components with asset extraction
-	pub fn extract_components_with_assets(
-		&self,
-		input: &Path,
-		asset_output_dir: &Path,
-		asset_slug: &str,
-		project_root: Option<&Path>,
-	) -> Result<Vec<BlockComponent>, String> {
-		let root = project_root
-			.map(|p| p.to_path_buf())
-			.unwrap_or_else(find_project_root);
-		let input_abs = abs_path(input, &root);
-		if !input_abs.exists() {
-			return Err(format!("Input file not found: {}", input_abs.display()));
-		}
-
-		// Create asset output directory
-		let asset_dir = asset_output_dir.join(asset_slug);
-		std::fs::create_dir_all(&asset_dir)
-			.map_err(|e| format!("Failed to create asset dir: {}", e))?;
-
-		// Get AST with rebased paths using markdown input with ExtractMedia
-		let mut pandoc = Pandoc::new();
-		let _ = pandoc
-			.add_options(&[pandoc::PandocOption::ExtractMedia(asset_slug.into())])
-			.set_input(pandoc::InputKind::Files(vec![input_abs]))
-			.set_input_format(
-				pandoc::InputFormat::Markdown,
-				vec![
-					pandoc::MarkdownExtension::RebaseRelativePaths,
-					pandoc::MarkdownExtension::FencedDivs,
-					pandoc::MarkdownExtension::Smart,
-				],
-			)
-			.set_output(OutputKind::Pipe)
-			.set_output_format(OutputFormat::Json, vec![]);
-
-		// Execute in asset output directory so ExtractMedia works
-		let _guard = WithDir::new(asset_output_dir)
-			.map_err(|e| format!("Failed to change directory: {}", e))?;
-
-		let ast: PandocAst = match pandoc.execute() {
-			Ok(PandocOutput::ToBuffer(json)) => serde_json::from_str(&json)
-				.map_err(|e| format!("Failed to parse Pandoc JSON: {}", e))?,
-			Ok(_) => return Err("Unexpected Pandoc output kind".into()),
-			Err(e) => return Err(format!("Pandoc execution failed: {}", e)),
-		};
-
-		// Convert blocks to HTML
-		let mut components = Vec::new();
 		for block in ast.blocks {
 			let html = self.block_to_html(&block)?;
 			components.push(BlockComponent {

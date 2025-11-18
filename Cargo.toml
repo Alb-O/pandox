@@ -1,19 +1,26 @@
-[workspace]
-resolver = "2"
-members = [
-    "crates/*",
-]
+[package]
+name = "pandox"
+edition = "2024"
 
 [workspace.package]
-edition = "2024"
 version = "0.1.0"
+edition = "2024"
+authors = ["Albert O'Shea"]
+readme = "README.md"
 
-[workspace.lints.rust]
-missing_docs = "warn"
+[workspace.lints]
+rust.missing_docs = "warn"
+rust.unused_crate_dependencies = "warn"
 
 [workspace.dependencies]
-dioxus = "0.7"
-pandox-ui = { path = "crates/pandox-ui" }
-pandox-web = { path = "crates/pandox-web" }
-pandox-markdown = { path = "crates/pandox-markdown" }
+dioxus = { version = "0.7", features = ["router"] }
+env_logger = "0.11"
+log = "0.4"
 pandox-macros = { path = "crates/pandox-macros" }
+pandox-markdown = { path = "crates/pandox-markdown" }
+pandox-ui = { path = "crates/pandox-ui" }
+
+[dependencies]
+dioxus = { workspace = true }
+pandox-macros = { workspace = true }
+pandox-ui = { workspace = true }

@@ -13,5 +13,5 @@ pub fn Test() -> Element {
 
 #[component]
 pub fn TestContent() -> Element {
-	mdfile!("test/index.md", slug = "test")
+	mdfile!("test/index.md")
 }

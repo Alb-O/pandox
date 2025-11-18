@@ -1,12 +1,3 @@
-#![warn(
-	missing_docs,
-	missing_debug_implementations,
-	missing_copy_implementations,
-	trivial_bounds,
-	unused_extern_crates,
-	unused_results
-)]
-
 //! Pandox Parser - Markdown to HTML converter using Pandoc
 //!
 //! This crate provides functionality to parse Markdown files using Pandoc

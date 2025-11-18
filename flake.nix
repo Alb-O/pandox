@@ -9,7 +9,6 @@
 
   outputs =
     {
-      self,
       nixpkgs,
       rust-overlay,
       flake-utils,
@@ -30,6 +29,7 @@
             buildInputs = [
               openssl
               pkg-config
+              cargo-sort
               pandoc
               tailwindcss_4
               dioxus-cli

@@ -1,10 +1,9 @@
 [application]
 default_platform = "web"
 
-# Relative to pandox-web crate
 tailwind_input = "tailwind.css"
 tailwind_output = "assets/tailwind.compiled.css"
-public_dir = "../../modules"
+public_dir = "modules"
 
 [web.app]
 title = "Pandox"
