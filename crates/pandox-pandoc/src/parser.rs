@@ -1,6 +1,5 @@
 use std::path::{Path, PathBuf};
 
-use log::debug;
 use pandoc::{OutputFormat, OutputKind, Pandoc, PandocOutput};
 use pandoc_types::definition::{Block, Pandoc as PandocAst};
 use with_dir::WithDir;
@@ -77,6 +76,7 @@ impl MarkdownParser {
 		input: &Path,
 		project_root: Option<&Path>,
 	) -> Result<Vec<BlockComponent>, String> {
+		tracing::info!("Extracting components from: {:?}", input);
 		let ast = self.to_pandoc_ast(input, project_root)?;
 		let mut components = Vec::new();
 
@@ -128,7 +128,6 @@ impl MarkdownParser {
 		if !input_abs.exists() {
 			return Err(format!("Input file not found: {}", input_abs.display()));
 		}
-		debug!("Converting markdown file {:?} to Pandoc AST", input_abs);
 
 		let mut pandoc = Pandoc::new();
 		let _ = pandoc
@@ -165,7 +164,6 @@ impl MarkdownParser {
 		if !input_abs.exists() {
 			return Err(format!("Input file not found: {}", input_abs.display()));
 		}
-		debug!("Converting markdown file {:?} to HTML string", input_abs);
 		let pandoc = markdown_pandoc(&input_abs, None);
 		match pandoc.execute() {
 			Ok(PandocOutput::ToBuffer(output)) => Ok(output.to_string()),
@@ -185,7 +183,6 @@ impl MarkdownParser {
 		let root = project_root
 			.map(|p| p.to_path_buf())
 			.unwrap_or_else(find_project_root);
-		debug!("Using project root: {:?}", root);
 		let input_abs = abs_path(input, &root);
 		let output_abs = abs_path(output, &root);
 		if !input_abs.exists() {
@@ -200,10 +197,6 @@ impl MarkdownParser {
 				.unwrap_or_else(|_| panic!("Failed to create output dir: {}", parent.display()));
 		}
 		let output_asset_dir = output_abs.parent().unwrap().join(asset_slug);
-		debug!(
-			"Converting markdown file {:?} to HTML file {:?} with assets in {:?}",
-			input_abs, output_abs, output_asset_dir
-		);
 		std::fs::create_dir_all(&output_asset_dir).unwrap();
 		let pandoc = markdown_pandoc(&input_abs, Some(&output_abs));
 		let _guard =

@@ -100,5 +100,9 @@ fn sanitize_dump_label(path: &Path) -> String {
 			_ => buf.push('_'),
 		}
 	}
-	if buf.is_empty() { "_".into() } else { buf }
+	if buf.is_empty() {
+		"_".into()
+	} else {
+		buf
+	}
 }

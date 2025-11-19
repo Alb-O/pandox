@@ -20,7 +20,7 @@ enum Route {
 
 const FAVICON: Asset = asset!("/assets/favicon.ico");
 const MAIN_CSS: Asset = asset!("/assets/main.css");
-const TAILWIND: Option<Asset> = option_asset!("/assets/tailwind.compiled.css");
+// const TAILWIND: Option<Asset> = option_asset!("/assets/tailwind.compiled.css");
 
 /// Launch the Pandox site app
 pub fn main() {
@@ -35,9 +35,9 @@ fn App() -> Element {
 		// Global app resources
 		document::Link { rel: "icon", href: FAVICON }
 		document::Link { rel: "stylesheet", href: MAIN_CSS }
-		if let Some(tailwind) = TAILWIND {
-			document::Link { rel: "stylesheet", href: tailwind }
-		}
+		// if let Some(tailwind) = TAILWIND {
+		// 	document::Link { rel: "stylesheet", href: tailwind }
+		// }
 
 		Router::<Route> {}
 	}

@@ -7,15 +7,16 @@ edition.workspace = true
 proc-macro = true
 
 [dependencies]
-log.workspace = true
-dioxus-autofmt = "0.7"
-dioxus-rsx = "0.7"
-dioxus-rsx-rosetta = "0.7"
+dioxus-autofmt.workspace = true
+dioxus-rsx.workspace = true
+dioxus-rsx-rosetta.workspace = true
 html_parser = "0.7"
 pandox-pandoc = { workspace = true }
 proc-macro2 = "1"
 quote = "1"
 syn = { version = "2", features = ["full"] }
+tracing.workspace = true
+tracing-subscriber.workspace = true
 
 [lints]
 workspace = true

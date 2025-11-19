@@ -2,7 +2,7 @@ use dioxus_rsx::{
 	Attribute, AttributeName, AttributeValue, BodyNode, HotLiteral, IfChain, PartialExpr,
 };
 use proc_macro2::Span as Span2;
-use syn::{LitStr, parse_quote};
+use syn::{parse_quote, LitStr};
 
 use crate::assets::AssetRewriteCtx;
 

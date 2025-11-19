@@ -2,7 +2,6 @@
 
 use std::path::PathBuf;
 
-use log::debug;
 use pandox_pandoc::MarkdownParser;
 use proc_macro::TokenStream;
 use quote::quote;
@@ -24,7 +23,13 @@ mod utils;
 /// Macro to include a markdown file as a Dioxus RSX component.
 #[proc_macro]
 pub fn mdfile(input: TokenStream) -> TokenStream {
+	let _ = tracing_subscriber::fmt()
+		.with_env_filter(tracing_subscriber::EnvFilter::from_default_env())
+		.with_writer(std::io::stderr)
+		.try_init();
+
 	let args = parse_macro_input!(input as args::MarkdownArgs);
+	tracing::info!("Macro expanding markdown: {:?}", args.path.value());
 
 	match expand_markdown(&args) {
 		Ok(stream) => stream,
@@ -57,11 +62,6 @@ fn expand_markdown(args: &args::MarkdownArgs) -> Result<TokenStream, TokenStream
 	}
 
 	dump::dump_full_rsx(markdown_path.as_path(), &rendered);
-	debug!(
-		"Rendered {} blocks from {:?}",
-		rendered.len(),
-		markdown_path
-	);
 
 	let nodes = rendered.iter().map(|block| block.tokens.clone());
 
