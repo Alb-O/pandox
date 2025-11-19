@@ -1,0 +1,10 @@
+[package]
+name = "pandox-log"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+tracing-subscriber = { version = "0.3", features = ["fmt", "ansi", "env-filter"] }
+
+[lints]
+workspace = true

@@ -22,8 +22,8 @@ pandox-macros = { path = "crates/pandox-macros" }
 pandox-modules = { path = "crates/pandox-modules" }
 pandox-pandoc = { path = "crates/pandox-pandoc" }
 pandox-site = { path = "crates/pandox-site" }
+pandox-log = { path = "crates/pandox-log" }
 tracing = "0.1"
-tracing-subscriber = { version = "0.3", features = ["env-filter"] }
 
 [dependencies]
 dioxus = { workspace = true }

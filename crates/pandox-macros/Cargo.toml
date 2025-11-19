@@ -11,12 +11,13 @@ dioxus-autofmt.workspace = true
 dioxus-rsx.workspace = true
 dioxus-rsx-rosetta.workspace = true
 html_parser = "0.7"
+pandox-log.workspace = true
 pandox-pandoc = { workspace = true }
 proc-macro2 = "1"
 quote = "1"
 syn = { version = "2", features = ["full"] }
 tracing.workspace = true
-tracing-subscriber.workspace = true
+
 
 [lints]
 workspace = true

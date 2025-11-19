@@ -1286,6 +1286,13 @@ dependencies = [
 ]
 
 [[package]]
+name = "pandox-log"
+version = "0.1.0"
+dependencies = [
+ "tracing-subscriber",
+]
+
+[[package]]
 name = "pandox-macros"
 version = "0.1.0"
 dependencies = [
@@ -1293,12 +1300,12 @@ dependencies = [
  "dioxus-rsx",
  "dioxus-rsx-rosetta",
  "html_parser",
+ "pandox-log",
  "pandox-pandoc",
  "proc-macro2",
  "quote",
  "syn 2.0.110",
  "tracing",
- "tracing-subscriber",
 ]
 
 [[package]]

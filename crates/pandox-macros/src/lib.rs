@@ -23,10 +23,7 @@ mod utils;
 /// Macro to include a markdown file as a Dioxus RSX component.
 #[proc_macro]
 pub fn mdfile(input: TokenStream) -> TokenStream {
-	let _ = tracing_subscriber::fmt()
-		.with_env_filter(tracing_subscriber::EnvFilter::from_default_env())
-		.with_writer(std::io::stderr)
-		.try_init();
+	pandox_log::init_tracing();
 
 	let args = parse_macro_input!(input as args::MarkdownArgs);
 	tracing::info!("Macro expanding markdown: {:?}", args.path.value());
