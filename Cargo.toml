@@ -14,15 +14,22 @@ console_log = "1"
 log = "0.4"
 console_error_panic_hook = "0.1"
 
+[workspace.lints.rust]
+missing_docs = "warn"
+unused_crate_dependencies = "warn"
+
+[lints]
+workspace = true
+
 # utils
 # strum = { version = "0.25", features = ["derive", "strum_macros"] }
 # strum_macros = "0.25"
 
 
-[dev-dependencies]
-wasm-bindgen = "0.2"
-wasm-bindgen-test = "0.3"
-web-sys = { version = "0.3", features = ["Document", "Window"] }
+# [dev-dependencies]
+# wasm-bindgen = "0.2"
+# wasm-bindgen-test = "0.3"
+# web-sys = { version = "0.3", features = ["Document", "Window"] }
 
 
 [profile.release]
@@ -32,5 +39,6 @@ codegen-units = 1
 panic = "abort"
 
 [build-dependencies]
-pandoc = "0.8.11"
-walkdir = "2.5.0"
+pandoc = "0.8"
+serde_json = "1.0"
+walkdir = "2.5"

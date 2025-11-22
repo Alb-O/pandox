@@ -3,7 +3,7 @@ When adding/removing crates from the project, ALWAYS use cargo commands to do so
 # PRODUCTIVITY: Skim any crate APIs/docs through simple cli
 
 - Usage: `ripdoc [GLOBAL_FLAGS] [TARGET] [SUBCOMMAND ...]`
-- Basic skim from any directory: `ripdoc [target]` or `ripdoc render [target]` → rendered Markdown with top-level docs and code skeleton (use `--format rust` for Rust-like signatures)
+- Basic skim from any directory: `ripdoc [target]` or `ripdoc render [target]` → rendered Markdown with top-level docs and code skeleton
 - Can target crates.io (no url needed, just name) or local crate paths
 - Get structure only: `ripdoc list <target> [--search term]` → list of modules/macros/types with source locations
 - Search within docs: `ripdoc search <target> <term>` (combine with `--search-spec name,doc,path,signature` and `--direct-match-only`/`-d` to avoid auto-expanding parents)

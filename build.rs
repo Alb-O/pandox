@@ -1,10 +1,64 @@
+//! Build script that converts Markdown to HTML and extracts media for the CSR app.
+
 use std::path::{Path, PathBuf};
 use std::{env, fs};
 
 use pandoc::{
 	InputFormat, InputKind, MarkdownExtension, OutputFormat, OutputKind, PandocOption, PandocOutput,
 };
+use serde_json::Value;
 use walkdir::WalkDir;
+
+/// Adjusts media URLs so pandoc hashes them via `--extract-media`.
+/// Adds a redundant `../` segment to force pandoc to treat the path as non-original.
+fn bump_media_path(url: &mut String) {
+	if url.starts_with('#')
+		|| url.starts_with("http://")
+		|| url.starts_with("https://")
+		|| url.starts_with("data:")
+		|| url.contains("..")
+	{
+		return;
+	}
+	let bumped = match url.trim_start_matches("./").split_once('/') {
+		Some((first, rest)) => format!("{first}/../{first}/{rest}"),
+		None => format!("../{url}"),
+	};
+	*url = bumped;
+}
+
+/// Recursively rewrites image/link targets in a Pandoc JSON document.
+fn rewrite_media_links(value: &mut Value) {
+	match value {
+		Value::Array(items) => {
+			if items.first().and_then(Value::as_str) == Some("Image") {
+				if let Some(Value::Array(target)) = items.get_mut(3) {
+					if let Some(Value::String(url)) = target.get_mut(0) {
+						bump_media_path(url);
+					}
+				}
+			}
+			for item in items {
+				rewrite_media_links(item);
+			}
+		}
+		Value::Object(map) => {
+			if map.get("t").and_then(Value::as_str) == Some("Image") {
+				if let Some(Value::Array(c)) = map.get_mut("c") {
+					if let Some(Value::Array(target)) = c.get_mut(2) {
+						if let Some(Value::String(url)) = target.get_mut(0) {
+							bump_media_path(url);
+						}
+					}
+				}
+			}
+			for (_, v) in map.iter_mut() {
+				rewrite_media_links(v);
+			}
+		}
+		_ => {}
+	}
+}
 
 fn main() {
 	println!("cargo:rerun-if-changed=modules");
@@ -60,10 +114,16 @@ fn main() {
 		pandoc.set_output(OutputKind::Pipe);
 		pandoc.add_option(PandocOption::MathJax(None));
 		pandoc.add_option(PandocOption::ExtractMedia(media_dir.clone()));
+		pandoc.add_filter(|json| {
+			let mut doc: Value = serde_json::from_str(&json).expect("parse pandoc json");
+			rewrite_media_links(&mut doc);
+			serde_json::to_string(&doc).expect("serialize pandoc json")
+		});
 
 		let html = match pandoc.execute().expect("pandoc") {
 			PandocOutput::ToBuffer(html) => {
 				let media_prefix = media_dir.to_string_lossy().replace('\\', "/") + "/";
+				// Keep URLs consistent with the hashed filenames pandoc writes into media_dir.
 				html.replace(&media_prefix, &format!("/assets/{slug}/"))
 			}
 			PandocOutput::ToBufferRaw(bytes) => String::from_utf8(bytes).expect("utf8 html"),

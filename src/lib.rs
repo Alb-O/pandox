@@ -1,7 +1,11 @@
+//! Leptos client-side app wiring and routes.
+
 use leptos::prelude::*;
 use leptos_meta::*;
 use leptos_router::components::*;
 use leptos_router::path;
+use log::{info, Level};
+use {console_error_panic_hook, console_log};
 
 // Modules
 mod components;
@@ -12,6 +16,13 @@ mod pages;
 use crate::pages::home::Home;
 use crate::pages::markdown::MarkdownPage;
 use crate::pages::not_found::NotFound;
+
+/// Initialize logging and panic hooks for the WASM target.
+pub fn init_logging() {
+	let _ = console_log::init_with_level(Level::Debug);
+	console_error_panic_hook::set_once();
+	info!("Logging initialized");
+}
 
 /// An app router which renders the homepage and handles 404's
 #[component]

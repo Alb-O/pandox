@@ -1,14 +1,15 @@
-use bezel::App;
+//! Client entrypoint for the CSR build.
+
+// Bin target reuses lib deps, silence noisy lint.
+#![allow(unused_crate_dependencies)]
+
+use bezel::{init_logging, App};
 use leptos::prelude::*;
 
 fn main() {
-	// set up logging
-	_ = console_log::init_with_level(log::Level::Debug);
-	console_error_panic_hook::set_once();
+	init_logging();
 
 	mount_to_body(|| {
-		view! {
-			<App />
-		}
+		view! { <App /> }
 	})
 }
