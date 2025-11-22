@@ -5,10 +5,13 @@ use leptos_router::path;
 
 // Modules
 mod components;
+mod content;
 mod pages;
 
 // Top-Level pages
 use crate::pages::home::Home;
+use crate::pages::markdown::MarkdownPage;
+use crate::pages::not_found::NotFound;
 
 /// An app router which renders the homepage and handles 404's
 #[component]
@@ -27,8 +30,9 @@ pub fn App() -> impl IntoView {
 		<Meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
 		<Router>
-			<Routes fallback=|| view! { NotFound }>
+			<Routes fallback=|| view! { <NotFound /> }>
 				<Route path=path!("/") view=Home />
+				<Route path=path!("/docs/:slug") view=MarkdownPage />
 			</Routes>
 		</Router>
 	}

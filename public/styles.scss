@@ -50,3 +50,55 @@ button {
   text-align: center;
   margin: 2rem;
 }
+
+.docs {
+  margin: 2rem auto;
+  max-width: 36rem;
+}
+
+.doc-list {
+  display: grid;
+  gap: 0.5rem;
+  list-style: none;
+  padding: 0;
+}
+
+.markdown-body {
+  max-width: min(900px, 90vw);
+  text-align: left;
+  margin: 2rem auto;
+  padding: 1.5rem;
+  border-radius: 1rem;
+  background: color-mix(in srgb, white 80%, transparent);
+  box-shadow: 0 0.5rem 2rem rgba(0, 0, 0, 0.07);
+  line-height: 1.6;
+}
+
+.markdown-body img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 1rem auto;
+}
+
+.markdown-body pre {
+  padding: 1rem;
+  background: #0f172a;
+  color: #e2e8f0;
+  border-radius: 0.5rem;
+  overflow-x: auto;
+}
+
+.markdown-body code {
+  background: #e2e8f0;
+  padding: 0.1rem 0.3rem;
+  border-radius: 0.35rem;
+}
+
+.markdown-body .callout {
+  border-left: 4px solid #ea580c;
+  padding: 1rem;
+  margin: 1rem 0;
+  border-radius: 0.5rem;
+  background: #fff7ed;
+}

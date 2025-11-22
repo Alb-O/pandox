@@ -1,6 +1,8 @@
 use leptos::prelude::*;
+use leptos_router::components::A;
 
 use crate::components::counter_btn::Button;
+use crate::content::PAGES;
 
 /// Default Home Page
 #[component]
@@ -46,6 +48,26 @@ pub fn Home() -> impl IntoView {
 					<Button />
 					<Button increment=5 />
 				</div>
+
+				<section class="docs">
+					<h2>"Generated Markdown Pages"</h2>
+					<ul class="doc-list">
+						{move || {
+							PAGES
+								.iter()
+								.map(|page| {
+									view! {
+										<li>
+											<A href=format!("/docs/{}", page.slug)>
+												{page.slug}
+											</A>
+										</li>
+									}
+								})
+								.collect_view()
+						}}
+					</ul>
+				</section>
 
 			</div>
 		</ErrorBoundary>

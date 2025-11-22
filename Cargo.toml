@@ -30,3 +30,7 @@ opt-level = 'z'
 lto = true
 codegen-units = 1
 panic = "abort"
+
+[build-dependencies]
+pandoc = "0.8.11"
+walkdir = "2.5.0"
