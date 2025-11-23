@@ -1,15 +1,11 @@
-@import "https://unpkg.com/open-props";
-@import "https://unpkg.com/open-props/normalize.min.css";
-
 :root {
-  --npm-red: #cb3837;
-  --npm-black: #000000;
-  --npm-gray: #f2f2f2;
+  --accent-primary: #b2d234;
+  --accent-hover: #a1c122;
 
   /* Light mode defaults */
   --bg-color: #ffffff;
   --text-color: #24292e;
-  --link-color: #cb3837;
+  --link-color: var(--accent-primary);
   --code-bg: #f6f8fa;
   --border-color: #e1e4e8;
   --blockquote-text: #6a737d;
@@ -23,7 +19,7 @@
   :root {
     --bg-color: #0d1117;
     --text-color: #c9d1d9;
-    --link-color: #ef5b5a;
+    --link-color: var(--accent-primary);
     --code-bg: #161b22;
     --border-color: #30363d;
     --blockquote-text: #8b949e;
@@ -36,8 +32,7 @@ body {
   background-color: var(--bg-color);
   color: var(--text-color);
   line-height: 1.5;
-  border-top: 10px solid var(--npm-red);
-  /* The npm red top bar */
+  border-top: 10px solid var(--accent-primary);
   margin: 0;
 }
 
@@ -86,7 +81,7 @@ a:hover {
 }
 
 button {
-  background-color: var(--npm-red);
+  background-color: var(--accent-primary);
   color: white;
   border: none;
   padding: 0.75rem 1.5rem;
@@ -98,7 +93,7 @@ button {
 }
 
 button:hover {
-  background-color: #a82e2d;
+  background-color: var(--accent-hover);
 }
 
 /* Markdown Styles */
