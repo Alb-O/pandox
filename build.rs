@@ -9,6 +9,8 @@ use pandoc::{
 use serde_json::Value;
 use walkdir::WalkDir;
 
+const MODULES_DIR: &str = "modules";
+
 /// Adjusts media URLs so pandoc hashes them via `--extract-media`.
 /// Adds a redundant `../` segment to force pandoc to treat the path as non-original.
 fn bump_media_path(url: &mut String) {
@@ -61,7 +63,7 @@ fn rewrite_media_links(value: &mut Value) {
 }
 
 fn main() {
-	println!("cargo:rerun-if-changed=modules");
+	println!("cargo:rerun-if-changed={MODULES_DIR}");
 
 	let out_dir = PathBuf::from(env::var("OUT_DIR").expect("OUT_DIR not set"));
 	let target_dir =
@@ -75,7 +77,7 @@ fn main() {
 	let _ = fs::remove_dir_all(&generated_assets_root);
 	fs::create_dir_all(&generated_assets_root).expect("create generated assets root");
 
-	for entry in WalkDir::new("modules")
+	for entry in WalkDir::new(MODULES_DIR)
 		.into_iter()
 		.filter_map(Result::ok)
 		.filter(|e: &walkdir::DirEntry| {
@@ -87,7 +89,9 @@ fn main() {
 			.file_name()
 			.and_then(|name| name.to_str())
 			.expect("module folder name");
-		let media_dir = generated_assets_root.join(slug);
+		// Extract media into a single pooled generated assets directory.
+		// Pandoc will hash filenames based on file content to deduplicate and avoid collisions.
+		let media_dir = generated_assets_root.clone();
 
 		let markdown = fs::read_to_string(path).expect("read markdown");
 
@@ -123,14 +127,14 @@ fn main() {
 		let html = match pandoc.execute().expect("pandoc") {
 			PandocOutput::ToBuffer(html) => {
 				let media_prefix = media_dir.to_string_lossy().replace('\\', "/") + "/";
-				// Keep URLs consistent with the hashed filenames pandoc writes into media_dir.
-				html.replace(&media_prefix, &format!("/assets/{slug}/"))
+				// Strip the generated assets root prefix and rewrite to a flattened "/assets/" URL
+				html.replace(&media_prefix, "/assets/")
 			}
 			PandocOutput::ToBufferRaw(bytes) => String::from_utf8(bytes).expect("utf8 html"),
 			PandocOutput::ToFile(path) => fs::read_to_string(path).expect("read html"),
 		};
 
-		let html_path = out_dir.join("modules").join(slug).join("index.html");
+		let html_path = out_dir.join(MODULES_DIR).join(slug).join("index.html");
 		if let Some(parent) = html_path.parent() {
 			fs::create_dir_all(parent).expect("create module dir");
 		}

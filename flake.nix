@@ -27,10 +27,7 @@
           with pkgs;
           mkShell {
             buildInputs = [
-              (rust-bin.nightly.latest.default.override {
-                targets = [ "wasm32-unknown-unknown" ];
-                extensions = [ "rust-src" ];
-              })
+              (rust-bin.fromRustupToolchainFile ./rust-toolchain.toml)
               openssl
               pkg-config
               cargo-sort
