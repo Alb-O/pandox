@@ -76,6 +76,8 @@ You can also use `inline code` within text.
 
 ![Local Image](assets/local_image.jpg)
 
+![Local Video](assets/sample_video.mp4)
+
 ## Code
 
 ### Inline Code
