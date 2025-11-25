@@ -70,6 +70,24 @@ This will output the files necessary to run your app into the `dist` folder; you
 
 For further information about hosting Leptos CSR apps, please refer to [the Leptos Book chapter on deployment available here][deploy-csr].
 
+### Offline / file:// Protocol Distribution
+
+To create a self-contained HTML file that works when double-clicked (no web server required):
+
+```sh
+trunk build --release
+./scripts/patch-offline.sh dist
+```
+
+This embeds the WASM binary (base64-encoded) and JavaScript directly into `dist/index.html`, creating a single file that can be distributed and opened via `file://` protocol.
+
+**Note:** Assets in the `dist/assets/` folder (images, videos from markdown content) are not embedded and must be distributed alongside the HTML file.
+
+To skip WASM embedding (smaller files, but requires HTTP server):
+```sh
+EMBED_WASM=false ./scripts/patch-offline.sh dist
+```
+
 
 [Leptos]: https://github.com/leptos-rs/leptos
 

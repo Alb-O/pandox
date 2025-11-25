@@ -14,6 +14,11 @@ console_log = "1"
 log = "0.4"
 console_error_panic_hook = "0.1"
 
+[patch.crates-io]
+leptos_router = { git = "https://github.com/Alb-O/leptos", branch = "file-protocol-routing" }
+leptos = { git = "https://github.com/Alb-O/leptos", branch = "file-protocol-routing" }
+leptos_meta = { git = "https://github.com/Alb-O/leptos", branch = "file-protocol-routing" }
+
 [workspace.lints.rust]
 missing_docs = "warn"
 unused_crate_dependencies = "warn"
