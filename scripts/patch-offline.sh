@@ -1,19 +1,26 @@
 #!/usr/bin/env bash
-# Patches Trunk's dist output for file:// protocol compatibility.
-# Run after `trunk build` to make the bundle work when double-clicking index.html.
+# Builds and patches for file:// protocol compatibility (offline HTML).
+# Creates a self-contained bundle that works when double-clicking index.html.
 #
-# Transforms:
-# 1. Patches the JS file to embed WASM as base64 (fetch doesn't work on file://)
-# 2. <script type="module"> -> <script defer> (modules don't work on file://)
-# 3. Remove crossorigin attributes (CORS fails on file://)
-# 4. Remove modulepreload/preload links
+# Usage: ./scripts/patch-offline.sh [dist-dir]
+#
+# This script:
+# 1. Builds using resources/offline.html (no-modules wasm-bindgen target)
+# 2. Patches the JS file to embed WASM as base64 (fetch doesn't work on file://)
+# 3. Removes ES module syntax from HTML (modules don't work on file://)
+# 4. Removes crossorigin attributes (CORS fails on file://)
+# 5. Removes modulepreload/preload links
 
 set -euo pipefail
 
 DIST_DIR="${1:-dist}"
 
+# Build using the offline index file (no-modules target)
+echo "Building with resources/offline.html (no-modules target)..."
+trunk build --config Trunk.toml resources/offline.html
+
 if [[ ! -d "$DIST_DIR" ]]; then
-  echo "Error: dist directory '$DIST_DIR' not found. Run 'trunk build' first." >&2
+  echo "Error: dist directory '$DIST_DIR' not found. Build failed." >&2
   exit 1
 fi
 
@@ -137,6 +144,6 @@ with open(index_path, 'w') as f:
 print(f"Patched index.html")
 PYTHON_SCRIPT
 
-echo "Done! You can now open $INDEX directly via file:// protocol."
 echo "Distribute: index.html, $JS_FILE, and assets/ folder."
-echo "(The .wasm file is now embedded in the JS and can be removed)"
+echo "Removing $WASM_FILE as it's now embedded."
+rm -f "$DIST_DIR/$WASM_FILE"
