@@ -64,6 +64,7 @@ fn rewrite_media_links(value: &mut Value) {
 
 fn main() {
 	println!("cargo:rerun-if-changed={MODULES_DIR}");
+	println!("cargo:rerun-if-env-changed=BEZEL_OFFLINE");
 
 	let out_dir = PathBuf::from(env::var("OUT_DIR").expect("OUT_DIR not set"));
 	let target_dir =
@@ -127,8 +128,14 @@ fn main() {
 		let html = match pandoc.execute().expect("pandoc") {
 			PandocOutput::ToBuffer(html) => {
 				let media_prefix = media_dir.to_string_lossy().replace('\\', "/") + "/";
-				// Strip the generated assets root prefix and rewrite to a flattened "/assets/" URL
-				html.replace(&media_prefix, "/assets/")
+				// Use relative paths for offline builds (file:// protocol), absolute for server
+				// Set BEZEL_OFFLINE=1 environment variable for offline builds
+				let assets_prefix = if env::var("BEZEL_OFFLINE").is_ok() {
+					"./assets/"
+				} else {
+					"/assets/"
+				};
+				html.replace(&media_prefix, assets_prefix)
 			}
 			PandocOutput::ToBufferRaw(bytes) => String::from_utf8(bytes).expect("utf8 html"),
 			PandocOutput::ToFile(path) => fs::read_to_string(path).expect("read html"),

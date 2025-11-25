@@ -16,8 +16,9 @@ set -euo pipefail
 DIST_DIR="${1:-dist}"
 
 # Build using the offline index file (no-modules target)
+# Set BEZEL_OFFLINE=1 to make build.rs use relative asset paths
 echo "Building with resources/offline.html (no-modules target)..."
-trunk build --config Trunk.toml resources/offline.html
+BEZEL_OFFLINE=1 trunk build --config Trunk.toml resources/offline.html
 
 if [[ ! -d "$DIST_DIR" ]]; then
   echo "Error: dist directory '$DIST_DIR' not found. Build failed." >&2
