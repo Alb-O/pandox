@@ -1,7 +1,10 @@
+[workspace]
+members = [".", "tools/patch-offline"]
+
 [package]
 name = "bezel"
 version = "0.1.0"
-edition = "2021"
+edition = "2024"
 authors = ["Albert O'Shea <albertoshea2@gmail.com>"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html

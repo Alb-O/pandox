@@ -11,7 +11,8 @@
 
   <!-- include support for `wasm-bindgen --weak-refs` - see: https://rustwasm.github.io/docs/wasm-bindgen/reference/weak-references.html -->
   <!-- Using no-modules target for file:// protocol compatibility (avoids CORS) -->
-  <link data-trunk rel="rust" href="../" data-wasm-opt="z" data-weak-refs data-bindgen-target="no-modules" />
+  <link data-trunk rel="rust" href="../" data-bin="bezel" data-wasm-opt="z" data-weak-refs
+    data-bindgen-target="no-modules" />
 </head>
 
 <body></body>

@@ -9,7 +9,7 @@ use pandoc::{
 use serde_json::Value;
 use walkdir::WalkDir;
 
-const MODULES_DIR: &str = "modules";
+const MODULES_DIR: &str = "resources/modules";
 
 /// Adjusts media URLs so pandoc hashes them via `--extract-media`.
 /// Adds a redundant `../` segment to force pandoc to treat the path as non-original.

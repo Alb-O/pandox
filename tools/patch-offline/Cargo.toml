@@ -1,0 +1,9 @@
+[package]
+name = "patch-offline"
+version = "0.1.0"
+edition = "2024"
+description = "Patches Trunk output for file:// protocol compatibility"
+
+[dependencies]
+base64 = "0.22"
+regex = "1"
