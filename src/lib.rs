@@ -1,5 +1,8 @@
 //! Leptos client-side app wiring and routes.
 
+// web_sys is used by the binary, not the library
+use web_sys as _;
+
 use leptos::prelude::*;
 use leptos_meta::*;
 use leptos_router::components::*;

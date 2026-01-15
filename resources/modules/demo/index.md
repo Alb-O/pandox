@@ -1,6 +1,6 @@
 # Test Markdown Document
 
-This is a comprehensive test document showcasing various markdown features for parser testing.
+This is a test document showcasing various markdown features for parser testing.
 
 ## Table of Contents
 
@@ -200,7 +200,7 @@ This is the second line (two spaces at the end of previous line).
 
 This is a new paragraph.
 
-## HTML (if allowed)
+## HTML
 
 <div style="color: blue;">
 This is HTML content in markdown.
@@ -213,7 +213,7 @@ Hidden content goes here.
 
 </details>
 
-## Emojis (if supported)
+## Emojis
 
 :smile: :rocket: :heart:
 

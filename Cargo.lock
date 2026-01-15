@@ -110,6 +110,7 @@ dependencies = [
  "pandoc",
  "serde_json",
  "walkdir",
+ "web-sys",
 ]
 
 [[package]]

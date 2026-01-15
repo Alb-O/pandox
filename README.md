@@ -1,97 +1,28 @@
-<picture>
-    <source srcset="https://raw.githubusercontent.com/leptos-rs/leptos/main/docs/logos/Leptos_logo_Solid_White.svg" media="(prefers-color-scheme: dark)">
-    <img src="https://raw.githubusercontent.com/leptos-rs/leptos/main/docs/logos/Leptos_logo_RGB.svg" alt="Leptos Logo">
-</picture>
+# Bezel
 
-# Leptos Client-Side Rendered (CSR) App Starter Template
+Leptos CSR app with markdown content rendering and offline support.
 
-This is a template for use with the [Leptos][Leptos] web framework using the [Trunk][Trunk] tool to compile and serve your app in development.
-
-## Creating your repo from the template
-
-This template requires you to have `cargo-generate` and `trunk` installed. [`leptosfmt`](https://github.com/bram209/leptosfmt) is optional but highly recommended. You can install them with
+## Development
 
 ```sh
-cargo install cargo-generate trunk leptosfmt
+trunk serve --public-url /
 ```
 
+Serves at `http://localhost:8080`. The `--public-url /` flag is required for asset loading on nested routes.
 
-To set up your project with this template, run
-
-```sh
-cargo generate --git https://github.com/leptos-rs/start-trunk
-```
-
-to generate your new project, then
-
-```sh
-cd bezel
-```
-
-to go to your newly created project.
-
-By default, this template uses Rust `nightly` and requires that you've installed the `wasm` compilation target for your toolchain.
-
-
-Sass and Tailwind are also supported by the Trunk build tool, but are optional additions: [see here for more info on how to set those up with Trunk][Trunk-instructions].
-
-
-If you don't have Rust nightly, you can install it with
-```sh
-rustup toolchain install nightly --allow-downgrade
-```
-
-You can add the `wasm` compilation target to rust using
-```sh
-rustup target add wasm32-unknown-unknown
-```
-
-
-## Developing your Leptos CSR project
-
-To develop your Leptos CSR project, running
-
-```sh
-trunk serve --port 3000 --open
-```
-
-will open your app in your default browser at `http://localhost:3000`.
-
-
-## Deploying your Leptos CSR project
-
-To build a Leptos CSR app for release, use the command
+## Build
 
 ```sh
 trunk build --release
 ```
 
-This will output the files necessary to run your app into the `dist` folder; you can then use any static site host to serve these files.
+Output goes to `dist/`.
 
-For further information about hosting Leptos CSR apps, please refer to [the Leptos Book chapter on deployment available here][deploy-csr].
+## Offline Build
 
-### Offline / file:// Protocol Distribution
-
-To create a self-contained HTML file that works when double-clicked (no web server required):
+For file:// protocol distribution (no server required):
 
 ```sh
 trunk build --release
-./scripts/patch-offline.sh dist
+cargo run -p patch-offline -- dist
 ```
-
-This embeds the WASM binary (base64-encoded) and JavaScript directly into `dist/index.html`, creating a single file that can be distributed and opened via `file://` protocol.
-
-**Note:** Assets in the `dist/assets/` folder (images, videos from markdown content) are not embedded and must be distributed alongside the HTML file.
-
-To skip WASM embedding (smaller files, but requires HTTP server):
-```sh
-EMBED_WASM=false ./scripts/patch-offline.sh dist
-```
-
-
-[Leptos]: https://github.com/leptos-rs/leptos
-
-[Trunk]: https://github.com/trunk-rs/trunk
-[Trunk-instructions]: https://trunkrs.dev/assets/
-
-[deploy-csr]: https://book.leptos.dev/deployment/csr.html

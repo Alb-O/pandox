@@ -48,15 +48,16 @@ ignore = []
 # The address to serve on.
 addresses = ["127.0.0.1"]
 # The port to serve on.
-port = 3000
+port = 8080
 # Aliases to serve, typically found in an /etc/hosts file.
 # aliases = ["http://localhost.mywebsite.com"]
 # Disable the reverse DNS lookup during startup
 # disable_address_lookup = false
 # Open a browser tab once the initial build is complete.
 open = false
-# Whether to disable fallback to index.html for missing files.
-# no_spa = false
+# SPA fallback is required for client-side routing on refresh.
+# NOTE: For development, use `trunk serve --public-url /` to fix asset
+# loading on nested routes. The default "./" is for offline/file:// builds.
 # Disable auto-reload of the web app.
 # no_autoreload = false
 # Disable error reporting
