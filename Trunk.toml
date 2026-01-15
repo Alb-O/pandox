@@ -22,7 +22,7 @@ stage = "post_build"
 command = "sh"
 command_arguments = [
     "-c",
-    "mkdir -p \"$TRUNK_STAGING_DIR/assets\" && cp -a target/generated-assets/. \"$TRUNK_STAGING_DIR/assets/\"",
+    "mkdir -p \"$TRUNK_STAGING_DIR/assets\" && cp -a \"${CARGO_TARGET_DIR:-target}/generated-assets/.\" \"$TRUNK_STAGING_DIR/assets/\"",
 ]
 
 # Run without network access
