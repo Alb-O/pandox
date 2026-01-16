@@ -181,9 +181,9 @@ fn patch_html_file(html_path: &Path, js_path: &Path) -> Result<(), String> {
 
 	let js_filename = js_path.file_name().unwrap().to_string_lossy();
 
-	// Remove the ES module script block entirely
-	let module_re = Regex::new(r#"<script type="module">.*?</script>"#).unwrap();
-	html = module_re.replace(&html, "").to_string();
+	// Remove the ES module script block entirely ((?s) enables dotall mode for multiline match)
+	let module_re = Regex::new(r#"(?s)<script type="module">.*?</script>"#).unwrap();
+	html = module_re.replace_all(&html, "").to_string();
 
 	// Remove modulepreload and preload links (they cause errors on file://)
 	let modulepreload_re = Regex::new(r#"<link rel="modulepreload"[^>]*>"#).unwrap();
