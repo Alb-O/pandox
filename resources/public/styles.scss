@@ -230,35 +230,114 @@ button:hover {
 
 /* Callout boxes */
 .markdown-body .callout {
-  padding: 1rem 1.25rem;
+  position: relative;
+  padding: 1rem 1.25rem 1rem 3rem;
   margin: 1rem 0;
   border-radius: 6px;
   border-left: 4px solid var(--border-color);
   background-color: var(--code-bg);
 }
 
+.markdown-body .callout::before {
+  position: absolute;
+  left: 0.85rem;
+  top: 1rem;
+  font-size: 1.1rem;
+  line-height: 1;
+}
+
+.markdown-body .callout p:first-child::before {
+  display: block;
+  font-weight: 600;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  margin-bottom: 0.4rem;
+}
+
 .markdown-body .callout p:last-child {
   margin-bottom: 0;
 }
 
+/* Warning callout */
 .markdown-body .callout.warning {
   border-left-color: #d29922;
   background-color: rgba(210, 153, 34, 0.1);
 }
 
-.markdown-body .callout.info {
+.markdown-body .callout.warning::before {
+  content: "⚠";
+  color: #d29922;
+}
+
+.markdown-body .callout.warning p:first-child::before {
+  content: "Warning";
+  color: #d29922;
+}
+
+/* Info/Note callout */
+.markdown-body .callout.info,
+.markdown-body .callout.note {
   border-left-color: #58a6ff;
   background-color: rgba(88, 166, 255, 0.1);
 }
 
+.markdown-body .callout.info::before,
+.markdown-body .callout.note::before {
+  content: "ℹ";
+  color: #58a6ff;
+  font-weight: 700;
+}
+
+.markdown-body .callout.info p:first-child::before {
+  content: "Note";
+  color: #58a6ff;
+}
+
+.markdown-body .callout.note p:first-child::before {
+  content: "Note";
+  color: #58a6ff;
+}
+
+/* Danger callout */
 .markdown-body .callout.danger {
   border-left-color: #f85149;
   background-color: rgba(248, 81, 73, 0.1);
 }
 
-.markdown-body .callout.success {
+.markdown-body .callout.danger::before {
+  content: "✕";
+  color: #f85149;
+  font-weight: 700;
+}
+
+.markdown-body .callout.danger p:first-child::before {
+  content: "Danger";
+  color: #f85149;
+}
+
+/* Success/Tip callout */
+.markdown-body .callout.success,
+.markdown-body .callout.tip {
   border-left-color: #3fb950;
   background-color: rgba(63, 185, 80, 0.1);
+}
+
+.markdown-body .callout.success::before,
+.markdown-body .callout.tip::before {
+  content: "✓";
+  color: #3fb950;
+  font-weight: 700;
+}
+
+.markdown-body .callout.success p:first-child::before {
+  content: "Tip";
+  color: #3fb950;
+}
+
+.markdown-body .callout.tip p:first-child::before {
+  content: "Tip";
+  color: #3fb950;
 }
 
 /* Docs Layout */

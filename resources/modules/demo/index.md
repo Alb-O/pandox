@@ -24,8 +24,8 @@ Bezel uses [Pandoc](https://pandoc.org) for markdown processing with extensions 
 
 Custom callout blocks using fenced divs:
 
-::: {.callout .info}
-**Tip:** Use the sidebar to navigate between demo pages.
+::: {.callout .tip}
+Use the sidebar to navigate between demo pages.
 :::
 
 ## Offline Support

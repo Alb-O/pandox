@@ -36,18 +36,28 @@ Use the `println!` macro in Rust.
 
 ## Callout Boxes
 
+Callout boxes automatically display icons and titles based on their type.
+
 ::: {.callout .warning}
-**Heads up:** this section demonstrates a custom `callout` block rendered with a bespoke component.
+This section demonstrates a custom `callout` block. Be careful when using this feature in production.
 :::
 
 ::: {.callout .info}
-**Note:** This is an informational callout.
+This is an informational callout for general notes and tips.
+:::
+
+::: {.callout .note}
+The `.note` class is an alias for `.info` callouts.
 :::
 
 ::: {.callout .danger}
-**Warning:** This indicates something dangerous.
+This indicates something dangerous or a breaking change.
 :::
 
 ::: {.callout .success}
-**Success:** This indicates a successful operation.
+This indicates a successful operation or best practice.
+:::
+
+::: {.callout .tip}
+The `.tip` class is an alias for `.success` callouts.
 :::
