@@ -145,24 +145,52 @@ const __offlineWasmBytes = (function() {{
 	);
 
 	// Insert decoder at the start of the IIFE (after the opening)
-	js_content = js_content.replacen(
-		"let wasm_bindgen;\n(function() {",
-		&format!("let wasm_bindgen;\n(function() {{{decoder_snippet}"),
+	// Handle both old format: "let wasm_bindgen;\n(function() {"
+	// and new format: "let wasm_bindgen = (function(exports) {"
+	let inserted = js_content.replacen(
+		"let wasm_bindgen = (function(exports) {",
+		&format!("let wasm_bindgen = (function(exports) {{{decoder_snippet}"),
 		1,
 	);
+	let inserted = if inserted == js_content {
+		// Try old format
+		js_content.replacen(
+			"let wasm_bindgen;\n(function() {",
+			&format!("let wasm_bindgen;\n(function() {{{decoder_snippet}"),
+			1,
+		)
+	} else {
+		inserted
+	};
+	js_content = inserted;
 
 	// Patch the default WASM path resolution to use embedded bytes
-	// The no-modules JS has: module_or_path = script_src.replace(/\.js$/, '_bg.wasm');
+	// New format: if (module_or_path === undefined && script_src !== undefined)
 	let wasm_path_re = Regex::new(
-        r"if \(typeof module_or_path === 'undefined' && typeof script_src !== 'undefined'\) \{\s*module_or_path = script_src\.replace\(/\\\.js\$/, '_bg\.wasm'\);\s*\}"
-    ).unwrap();
+		r#"if \(module_or_path === undefined && script_src !== undefined\) \{\s*module_or_path = script_src\.replace\(/\\\.js\$/, "_bg\.wasm"\);\s*\}"#
+	).unwrap();
 
-	js_content = wasm_path_re
+	let patched = wasm_path_re
 		.replace(
 			&js_content,
-			"if (typeof module_or_path === 'undefined') { module_or_path = __offlineWasmBytes; }",
+			"if (module_or_path === undefined) { module_or_path = __offlineWasmBytes; }",
 		)
 		.to_string();
+
+	// If new format didn't match, try old format
+	js_content = if patched == js_content {
+		let old_re = Regex::new(
+			r"if \(typeof module_or_path === 'undefined' && typeof script_src !== 'undefined'\) \{\s*module_or_path = script_src\.replace\(/\\\.js\$/, '_bg\.wasm'\);\s*\}"
+		).unwrap();
+		old_re
+			.replace(
+				&js_content,
+				"if (typeof module_or_path === 'undefined') { module_or_path = __offlineWasmBytes; }",
+			)
+			.to_string()
+	} else {
+		patched
+	};
 
 	fs::write(js_path, js_content).map_err(|e| format!("Failed to write JS file: {e}"))?;
 
