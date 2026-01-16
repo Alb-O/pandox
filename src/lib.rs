@@ -13,6 +13,7 @@ use {console_error_panic_hook, console_log};
 // Modules
 mod components;
 mod content;
+mod navigation;
 mod pages;
 
 // Top-Level pages

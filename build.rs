@@ -6,8 +6,31 @@ use std::{env, fs};
 use pandoc::{
 	InputFormat, InputKind, MarkdownExtension, OutputFormat, OutputKind, PandocOption, PandocOutput,
 };
+use serde::Deserialize;
 use serde_json::Value;
 use walkdir::WalkDir;
+
+#[derive(Deserialize, Default)]
+struct Frontmatter {
+	title: Option<String>,
+	category: Option<String>,
+	order: Option<u32>,
+}
+
+/// Extracts YAML frontmatter from markdown content.
+/// Returns (frontmatter, remaining_content).
+fn extract_frontmatter(content: &str) -> (Frontmatter, &str) {
+	if content.starts_with("---\n") {
+		if let Some(end_idx) = content[4..].find("\n---\n") {
+			let yaml_str = &content[4..4 + end_idx];
+			let remaining = &content[4 + end_idx + 5..];
+			if let Ok(fm) = serde_yaml::from_str::<Frontmatter>(yaml_str) {
+				return (fm, remaining);
+			}
+		}
+	}
+	(Frontmatter::default(), content)
+}
 
 const MODULES_DIR: &str = "resources/modules";
 
@@ -72,7 +95,7 @@ fn main() {
 	let generated_assets_root = target_dir.join("generated-assets");
 	let generated = out_dir.join("content.rs");
 	let mut generated_code = String::from(
-		"pub struct Page { pub slug: &'static str, pub html: &'static str }\n\npub const PAGES: &[Page] = &[\n",
+		"pub struct Page { pub slug: &'static str, pub title: &'static str, pub category: &'static str, pub order: u32, pub html: &'static str }\n\npub const PAGES: &[Page] = &[\n",
 	);
 
 	let _ = fs::remove_dir_all(&generated_assets_root);
@@ -95,11 +118,17 @@ fn main() {
 		let media_dir = generated_assets_root.clone();
 
 		let markdown = fs::read_to_string(path).expect("read markdown");
+		let (frontmatter, markdown_body) = extract_frontmatter(&markdown);
+		let title = frontmatter.title.unwrap_or_else(|| slug.to_string());
+		let category = frontmatter
+			.category
+			.unwrap_or_else(|| "Uncategorized".into());
+		let order = frontmatter.order.unwrap_or(999);
 
 		fs::create_dir_all(&media_dir).expect("create media dir");
 
 		let mut pandoc = pandoc::new();
-		pandoc.set_input(InputKind::Pipe(markdown));
+		pandoc.set_input(InputKind::Pipe(markdown_body.to_string()));
 		pandoc.add_option(PandocOption::ResourcePath(vec![module_dir.into()]));
 		pandoc.set_input_format(
 			InputFormat::Markdown,
@@ -149,7 +178,7 @@ fn main() {
 
 		let include_path = html_path.to_str().expect("html path").replace('\\', "/");
 		generated_code.push_str(&format!(
-			"    Page {{ slug: \"{slug}\", html: include_str!(r\"{include_path}\") }},\n"
+			"    Page {{ slug: \"{slug}\", title: \"{title}\", category: \"{category}\", order: {order}, html: include_str!(r\"{include_path}\") }},\n"
 		));
 	}
 

@@ -1,6 +1,9 @@
+//! Markdown page component with docs layout.
+
 use leptos::prelude::*;
 use leptos_router::hooks::use_params_map;
 
+use crate::components::docs_layout::DocsLayout;
 use crate::content::PAGES;
 
 #[component]
@@ -14,5 +17,9 @@ pub fn MarkdownPage() -> impl IntoView {
 			.unwrap_or("<p>Not found</p>")
 	};
 
-	view! { <article class="markdown-body" inner_html=move || html().to_string() /> }
+	view! {
+		<DocsLayout>
+			<article class="markdown-body" inner_html=move || html().to_string() />
+		</DocsLayout>
+	}
 }
