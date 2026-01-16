@@ -32,6 +32,7 @@
               pkg-config
               cargo-sort
               cargo-generate
+              cargo-edit
               pandoc
               leptosfmt
               tailwindcss_4
